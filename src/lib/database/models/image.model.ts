@@ -1,4 +1,3 @@
-import { auth } from "@clerk/nextjs/server";
 import mongoose, { models } from "mongoose";
 import { Types } from "mongoose";
 
