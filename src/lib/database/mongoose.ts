@@ -1,6 +1,6 @@
 import mongoose, { Mongoose } from "mongoose";
 
-const MongoDB_URL = process.env.MONGODB_URI;
+const MONGODB_URL = process.env.MONGODB_URL;
 
 interface MongooseConnection {
   conn: Mongoose | null;
@@ -10,21 +10,23 @@ interface MongooseConnection {
 let cached: MongooseConnection = (global as any).mongoose;
 
 if (!cached) {
-  cached = (global as any).mongoose = { conn: null, promise: null };
+  cached = (global as any).mongoose = {
+    conn: null,
+    promise: null,
+  };
 }
 
-export const connectdb = async () => {
-  if (cached.conn) {
-    return cached.conn;
-  }
+export const connectToDatabase = async () => {
+  if (cached.conn) return cached.conn;
 
-  if (!MongoDB_URL) {
-    throw new Error("MongoDB_URL not found");
-  }
+  if (!MONGODB_URL) throw new Error("Missing MONGODB_URL");
 
   cached.promise =
     cached.promise ||
-    mongoose.connect(MongoDB_URL, { dbName: "SaasApp", bufferCommands: false });
+    mongoose.connect(MONGODB_URL, {
+      dbName: "SaasApp",
+      bufferCommands: false,
+    });
 
   cached.conn = await cached.promise;
 
