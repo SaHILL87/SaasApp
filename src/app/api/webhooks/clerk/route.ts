@@ -66,10 +66,10 @@ export async function POST(req: Request) {
     const user = {
       clerkId: id,
       email: email_addresses[0].email_address,
-      username: username!,
+      username: username || "defaultUsername", // Fallback to default if username is missing
       firstName: first_name || "",
       lastName: last_name || "",
-      photo: image_url,
+      photo: image_url || "defaultAvatarUrl", // Fallback to default image URL if image is missing
     };
 
     const newUser = await createUser(user);
